@@ -28,7 +28,7 @@ class EpeverChargeController(minimalmodbus.Instrument):
         self, registeraddress, number_of_decimals, functioncode
     ):
         return self.read_register(
-            registeraddress, number_of_decimals, functioncode, False
+            registeraddress, number_of_decimals, functioncode, signed=True
         )
 
     @retry(wait_fixed=200, stop_max_attempt_number=5)
