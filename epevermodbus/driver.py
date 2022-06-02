@@ -43,17 +43,17 @@ class EpeverChargeController(minimalmodbus.Instrument):
         """PV array input in amps"""
         return self.retriable_read_register(0x3101, 2, 4)
 
-    def get_solar_power(self):
-        """PV array input in watts"""
-        return self.get_solar_voltage() * self.get_solar_current()
-
     def get_solar_power_l(self):
         """PV array input power L"""
-        return self.retriable_read_register(0x3102, 2, 4)
+        return self.retriable_read_register(0x3102, 0, 4)
 
     def get_solar_power_h(self):
         """PV array input power H"""
-        return self.retriable_read_register(0x3103, 2, 4)
+        return self.retriable_read_register(0x3103, 0, 4)
+
+    def get_solar_power(self):
+        """PV array input in watts"""
+        return (self.get_solar_power_l() | self.get_solar_power_h() << 16)/100
 
     def get_load_voltage(self):
         """Load output in volts"""
@@ -63,25 +63,29 @@ class EpeverChargeController(minimalmodbus.Instrument):
         """Load output in amps"""
         return self.retriable_read_register(0x310D, 2, 4)
 
-    def get_load_power(self):
-        """Load output in watts"""
-        return self.get_load_voltage() * self.get_load_current()
-
     def get_load_power_l(self):
         """Load power L"""
-        return self.retriable_read_register(0x310E, 2, 4)
+        return self.retriable_read_register(0x310E, 0, 4)
 
     def get_load_power_h(self):
         """Load power H"""
-        return self.retriable_read_register(0x310F, 2, 4)
+        return self.retriable_read_register(0x310F, 0, 4)
+
+    def get_load_power(self):
+        """Load power"""
+        return (self.get_load_power_l() | self.get_load_power_h() << 16)/100
 
     def get_battery_current_l(self):
         """Battery current L"""
-        return self.retriable_read_register(0x331B, 2, 4)
+        return self.retriable_read_register(0x331B, 0, 4)
 
     def get_battery_current_h(self):
         """Battery current H"""
-        return self.retriable_read_register(0x331C, 2, 4)
+        return self.retriable_read_register(0x331C, 0, 4)
+
+    def get_battery_current(self):
+        """Battery current"""
+        return (self.get_battery_current_l() | self.get_battery_current_h() << 16)/100
 
     def get_battery_voltage(self):
         """Battery voltage"""
