@@ -25,10 +25,10 @@ class EpeverChargeController(minimalmodbus.Instrument):
 
     @retry(wait_fixed=200, stop_max_attempt_number=5)
     def retriable_read_register(
-        self, registeraddress, number_of_decimals, functioncode
+        self, registeraddress, number_of_decimals, functioncode, signed=False
     ):
         return self.read_register(
-            registeraddress, number_of_decimals, functioncode, signed=True
+            registeraddress, number_of_decimals, functioncode, signed
         )
 
     @retry(wait_fixed=200, stop_max_attempt_number=5)
@@ -77,11 +77,11 @@ class EpeverChargeController(minimalmodbus.Instrument):
 
     def get_battery_current_l(self):
         """Battery current L"""
-        return self.retriable_read_register(0x331B, 0, 4)
+        return self.retriable_read_register(0x331B, 0, 4, True)
 
     def get_battery_current_h(self):
         """Battery current H"""
-        return self.retriable_read_register(0x331C, 0, 4)
+        return self.retriable_read_register(0x331C, 0, 4, True)
 
     def get_battery_current(self):
         """Battery current"""
